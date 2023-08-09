@@ -30,11 +30,22 @@ const createMustHaveRoutesMissingException = ({ missingRoutes }) => {
 	return createError('One or more MUST_HAVE routes are missing', { errorCode: 'E001-004', missingRoutes });
 };
 
+const createUnsupportedHttpTypeException = ({ unsupportedType, route, basePackageName, packageName }) => {
+	return createError('Unsupported Http Type', {
+		erroCode: 'E001-005',
+		unsupportedType,
+		route,
+		basePackageName,
+		packageName,
+	});
+};
+
 const elevateExceptions = {
 	createRepeatedConfigurationException,
 	createUnknownPriorityException,
 	createUnknownBasePackageNameException,
 	createMustHaveRoutesMissingException,
+	createUnsupportedHttpTypeException,
 };
 
 module.exports = elevateExceptions;

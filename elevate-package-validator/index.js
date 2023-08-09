@@ -1,5 +1,6 @@
 const { routes } = require('./routes');
 const elevateExceptions = require('./exceptions');
+const supportedHttpTypes = require('./supportHttpTypes');
 
 const getRouteMap = (packageRoutes, basePackageName, packageName) => {
 	const routeMap = new Map();
@@ -10,7 +11,21 @@ const getRouteMap = (packageRoutes, basePackageName, packageName) => {
 				basePackageName,
 				packageName,
 			});
-		routeMap.set(routeObject.route, new Set(routeObject.info.map((typeObject) => typeObject.type)));
+		routeMap.set(
+			routeObject.route,
+			new Set(
+				routeObject.info.map((typeObject) => {
+					if (!supportedHttpTypes.includes(typeObject.type))
+						throw elevateExceptions.createUnsupportedHttpTypeException({
+							unsupportedType: typeObject.type,
+							basePackageName,
+							route: routeObject.route,
+							packageName,
+						});
+					return typeObject.type;
+				})
+			)
+		);
 	}
 	return routeMap;
 };
