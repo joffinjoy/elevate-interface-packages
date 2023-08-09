@@ -60,11 +60,11 @@ const packageValidator = (packages) => {
 	}
 
 	if (fullWarnRoutesList.length > 0) {
-		console.log('\n\n[WARN][w001] One or more OPTIONAL routes are missing.');
+		console.log('\n\nOne or more OPTIONAL routes are missing:');
 		console.table(fullWarnRoutesList);
 	}
 	if (fullErrorRoutesList.length > 0) {
-		console.log('\n\n[ERROR][e002] One or more MUST_HAVE routes are missing.');
+		console.log('\n\nOne or more MUST_HAVE routes are missing:');
 		console.table(fullErrorRoutesList);
 		throw elevateExceptions.createMustHaveRoutesMissingException({ missingRoutes: fullErrorRoutesList });
 	}
