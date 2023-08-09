@@ -1,15 +1,8 @@
 const express = require('express');
+const routes = require('./routes');
 
 const getDependencies = () => {
 	return ['kafka', 'kafka-connect', 'redis'];
-};
-
-const getRoutes = () => {
-	return [{
-        '/v1/get-sessions'
-    }, {
-        '/v1/get-joinlink'
-    }];
 };
 
 const getPackageMeta = () => {
@@ -46,4 +39,4 @@ const createPackage = (options) => {
 	};
 };
 
-module.exports = { dependencies: getDependencies(), routes: getRoutes(), createPackage, packageMeta: getPackageMeta() };
+module.exports = { dependencies: getDependencies(), routes, createPackage, packageMeta: getPackageMeta() };

@@ -1,10 +1,15 @@
 const { routes } = require('./routes');
+const elevateExceptions = require('./exceptions');
 
-const getRouteMap = (packageRoutes) => {
+const getRouteMap = (packageRoutes, basePackageName, packageName) => {
 	const routeMap = new Map();
 	for (const routeObject of packageRoutes) {
 		if (routeMap.has(routeObject.route))
-			throw `[Error][e004] Repeated configurations for the same route: ${routeObject.route}`;
+			throw elevateExceptions.createRepeatedConfigurationException({
+				route: routeObject.route,
+				basePackageName,
+				packageName,
+			});
 		routeMap.set(routeObject.route, new Set(routeObject.info.map((typeObject) => typeObject.type)));
 	}
 	return routeMap;
@@ -13,16 +18,20 @@ const getRouteMap = (packageRoutes) => {
 const checkForMissingRoutes = (expectedRoutes, packageRoutes, basePackageName, packageName) => {
 	const errorRoutesList = [];
 	const warnRoutesList = [];
-	const routeMap = getRouteMap(packageRoutes);
+	const routeMap = getRouteMap(packageRoutes, basePackageName, packageName);
 	for (const expectedRoute of Object.keys(expectedRoutes)) {
 		for (const typeObject of expectedRoutes[expectedRoute]) {
 			const { type, priority } = typeObject;
 			if (!routeMap.has(expectedRoute) || !routeMap.get(expectedRoute).has(type)) {
-				const route = { basePackageName, packageName, route: expectedRoute, type };
+				const route = { basePackageName, packageName, route: expectedRoute, type, priority };
 				if (priority == 'MUST_HAVE') errorRoutesList.push(route);
 				else if (priority == 'OPTIONAL') warnRoutesList.push(route);
 				else
-					throw `[Error][e005] FATAL: Package validator configuration error on expected routes. Unknown Priority: ${priority}`;
+					throw elevateExceptions.createUnknownPriorityException({
+						unknownPriority: priority,
+						basePackageName,
+						route: expectedRoute,
+					});
 			}
 		}
 	}
@@ -32,10 +41,12 @@ const checkForMissingRoutes = (expectedRoutes, packageRoutes, basePackageName, p
 const packageValidator = (packages) => {
 	const fullErrorRoutesList = [];
 	const fullWarnRoutesList = [];
+	const packagesValidated = [];
 	for (const packageData of packages) {
 		const { basePackageName, packageName } = packageData.packageMeta;
 		const packageRoutes = packageData.routes;
-		if (!routes[basePackageName]) throw `[Error][e001] Unknown base-package name: ${basePackageName}`;
+		if (!routes[basePackageName])
+			throw elevateExceptions.createUnknownBasePackageNameException({ invalidBasePackageName: basePackageName });
 		const expectedRoutes = routes[basePackageName].routes;
 		const { errorRoutesList, warnRoutesList } = checkForMissingRoutes(
 			expectedRoutes,
@@ -45,22 +56,24 @@ const packageValidator = (packages) => {
 		);
 		fullErrorRoutesList.push(...errorRoutesList);
 		fullWarnRoutesList.push(...warnRoutesList);
+		packagesValidated.push({ basePackageName, packageName });
 	}
 
 	if (fullWarnRoutesList.length > 0) {
-		console.log('\n\n[WARN][w001] One or more OPTIONAL route are missing.');
+		console.log('\n\n[WARN][w001] One or more OPTIONAL routes are missing.');
 		console.table(fullWarnRoutesList);
 	}
 	if (fullErrorRoutesList.length > 0) {
 		console.log('\n\n[ERROR][e002] One or more MUST_HAVE routes are missing.');
 		console.table(fullErrorRoutesList);
-		throw `[Error][e002] One or more MUST_HAVE routes are missing. \nMissing Routes:${JSON.stringify(
-			fullErrorRoutesList,
-			undefined,
-			4
-		)}`;
+		throw elevateExceptions.createMustHaveRoutesMissingException({ missingRoutes: fullErrorRoutesList });
 	}
-	return true;
+	return {
+		success: true,
+		optionalRoutesMissing: fullWarnRoutesList,
+		packageCount: packages.length,
+		packagesValidated,
+	};
 };
 
 const elevateValidator = {
