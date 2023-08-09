@@ -1,0 +1,19 @@
+{
+  "name": "elevate-package-validator",
+  "version": "1.0.0",
+  "description": "Package validator for Elevate Interface Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "validator",
+    "package",
+    "elevate"
+  ],
+  "author": "Joffin Joy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
