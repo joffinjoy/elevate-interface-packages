@@ -1,0 +1,19 @@
+{
+	"name": "elevate-notification",
+	"version": "1.0.0",
+	"description": "Npm package for Elevate-Scheduler service integration with Interface service. ",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"keywords": [
+		"elevate",
+		"notification",
+		"interface"
+	],
+	"author": "Joffin Joy",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.18.2"
+	}
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692070073810" clover="3.2.0">
-  <project timestamp="1692070073810" name="All files">
+<coverage generated="1692070838742" clover="3.2.0">
+  <project timestamp="1692070838742" name="All files">
     <metrics statements="95" coveredstatements="95" conditionals="39" coveredconditionals="38" methods="15" coveredmethods="15" elements="149" coveredelements="148" complexity="0" loc="95" ncloc="95" packages="2" files="5" classes="5"/>
     <package name="elevate-package-validator">
       <metrics statements="53" coveredstatements="53" conditionals="6" coveredconditionals="6" methods="11" coveredmethods="11"/>
