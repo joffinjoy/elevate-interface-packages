@@ -4,7 +4,8 @@
 	"description": "Package validator for Elevate Interface Service",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"test:coverage": "jest --coverage"
 	},
 	"keywords": [
 		"validator",
