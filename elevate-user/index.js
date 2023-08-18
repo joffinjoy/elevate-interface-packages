@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const routes = require('./constants/routes');
+const userController = require('./controllers/user');
 
 const getDependencies = () => {
 	return ['kafka', 'kafka-connect', 'redis'];
@@ -27,4 +28,10 @@ router.get('/', (req, res) => {
 	res.send('Hello, world! From package2');
 });
 
-module.exports = { dependencies: getDependencies(), routes, createPackage, packageMeta: getPackageMeta() };
+module.exports = {
+	dependencies: getDependencies(),
+	routes,
+	createPackage,
+	packageMeta: getPackageMeta(),
+	controllers: { userController },
+};

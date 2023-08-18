@@ -1,5 +1,6 @@
 const express = require('express');
 const routes = require('./constants/routes');
+const mentoringController = require('./controllers/mentoring');
 
 const getDependencies = () => {
 	return ['kafka', 'kafka-connect', 'redis'];
@@ -39,4 +40,10 @@ const createPackage = (options) => {
 	};
 };
 
-module.exports = { dependencies: getDependencies(), routes, createPackage, packageMeta: getPackageMeta() };
+module.exports = {
+	dependencies: getDependencies(),
+	routes,
+	createPackage,
+	packageMeta: getPackageMeta(),
+	controllers: { mentoringController },
+};
