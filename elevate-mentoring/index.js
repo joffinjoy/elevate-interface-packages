@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require('./routes');
+const routes = require('./constants/routes');
 
 const getDependencies = () => {
 	return ['kafka', 'kafka-connect', 'redis'];

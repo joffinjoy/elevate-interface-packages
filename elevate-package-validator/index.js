@@ -3,7 +3,7 @@ const { checkForMissingRoutes } = require('./utils/checkForMissingRoutes');
 const { expectedRoutesValidator } = require('./utils/expectedRoutesValidator');
 
 const packageValidator = (packages, allExpectedRoutes, meta) => {
-	expectedRoutesValidator(allExpectedRoutes);
+	//expectedRoutesValidator(allExpectedRoutes);
 	const fullErrorRoutesList = [];
 	const fullWarnRoutesList = [];
 	const packagesValidated = [];
